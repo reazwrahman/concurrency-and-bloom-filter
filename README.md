@@ -1,8 +1,8 @@
 
 
 ### Time comparison (without using Bloom Filter)
-![img.png](time.png) 
+![img.png](no_filter.png)  
 
 
 ### Time and Memory comparison (with Bloom filter) 
-![img_1.png](time_memory.png)
+![img_1.png](with_filter.png)
