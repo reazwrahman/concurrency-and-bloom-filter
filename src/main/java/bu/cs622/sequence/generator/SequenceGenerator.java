@@ -28,7 +28,7 @@ public class SequenceGenerator implements Runnable{
         if (Configs.USE_FILTER) {
             sequences = generateUniqueSequences();
         } else {
-            sequences = generateUniqueSequences();
+            sequences = generateSequences();
         }
         if (Configs.DEBUG_MODE) {
             printSequences(sequences);

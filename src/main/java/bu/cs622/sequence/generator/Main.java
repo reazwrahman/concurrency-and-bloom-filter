@@ -33,7 +33,7 @@ public class Main {
         System.out.println("Single threaded total time taken: " + elapsed.toMillis() + " milliseconds");
         System.out.println("output size: " + output.size());
         System.out.println("filter size: " + filter.getApprxoimateSize());
-        System.out.println("Peak heap usage: " + filter.peakMemory/ (1024 * 1024) + " MB");
+        System.out.println("Peak heap used by bloom filter: " + filter.peakMemory/ (1024 * 1024) + " MB");
         return elapsed;
     }
 
@@ -66,13 +66,7 @@ public class Main {
         System.out.println("Multi threaded total time taken: " + elapsed.toMillis() + " milliseconds");
         System.out.println("output size: " + output.size());
         System.out.println("filter size: " + filter.getApprxoimateSize());
-        System.out.println("Peak heap usage: " + filter.peakMemory/ (1024 * 1024) + " MB");
+        System.out.println("Peak heap used by bloom filter: " + filter.peakMemory/ (1024 * 1024) + " MB");
         return elapsed;
     }
-
-        public static void printMemoryUsage() {
-            Runtime runtime = Runtime.getRuntime();
-            long usedMemory = runtime.totalMemory() - runtime.freeMemory();
-            System.out.println("Heap Usage: " + usedMemory / (1024 * 1024) + " MB");
-        }
 }
