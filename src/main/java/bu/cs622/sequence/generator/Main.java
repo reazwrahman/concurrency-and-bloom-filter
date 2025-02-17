@@ -1,5 +1,6 @@
 package bu.cs622.sequence.generator;
 
+import javax.management.InvalidAttributeValueException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -11,12 +12,19 @@ import static bu.cs622.sequence.generator.Configs.TOTAL_SEQUENCES;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, InvalidAttributeValueException {
+        //validateConfigs();
         if(Configs.SINGLE_THREAD) {
             runSingleThreaded();
         }
         if (Configs.MULTI_THREAD) {
             runMultiThreaded();
+        }
+    }
+
+    public static void validateConfigs() throws InvalidAttributeValueException {
+        if (Configs.USE_FILTER && TOTAL_SEQUENCES > 1000000) {
+            throw new InvalidAttributeValueException("Only 1 Million unique sequences can be generated");
         }
     }
 
@@ -47,10 +55,10 @@ public class Main {
         for (int i = 1; i <= numThreads; i++) {
             Thread thread = new Thread(new SequenceGenerator(i, TOTAL_SEQUENCES / THREAD_COUNT, output, filter));
             threads.add(thread);
-            thread.start(); // Start the thread
+            thread.start();
         }
 
-        // Wait for all threads to complete
+        // Wait for all threads to complete, before calculating duration
         for (Thread thread : threads) {
             try {
                 thread.join();
