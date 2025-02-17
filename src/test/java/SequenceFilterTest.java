@@ -4,7 +4,7 @@ import bu.cs622.sequence.generator.SequenceFilter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestSequenceFilter {
+public class SequenceFilterTest {
 
     @Test
     public void testBloomFilter(){
