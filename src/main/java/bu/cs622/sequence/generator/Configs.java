@@ -7,6 +7,6 @@ public class Configs {
 
     public static final boolean USE_FILTER = true;
 
-    public static final Integer TOTAL_SEQUENCES = 1000;
-    public static final Integer THREAD_COUNT = 20;
+    public static final Integer TOTAL_SEQUENCES = 1000000;
+    public static final Integer THREAD_COUNT = 5;
 }
