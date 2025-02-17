@@ -13,7 +13,7 @@ import static bu.cs622.sequence.generator.Configs.TOTAL_SEQUENCES;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException, InvalidAttributeValueException {
-        //validateConfigs();
+        validateConfigs();
         if(Configs.SINGLE_THREAD) {
             runSingleThreaded();
         }
