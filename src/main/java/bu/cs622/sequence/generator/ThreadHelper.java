@@ -48,26 +48,33 @@ public class ThreadHelper {
 
     private void useExecutorWithFuture() throws ExecutionException, InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
-        HashMap<Integer, Future<List<StringBuilder>>> threadResultsMap = new HashMap<>();
+        HashMap<Integer, Future<ArrayList<StringBuilder>>> threadResultsMap = new HashMap<>();
 
         for (int i=1; i<= THREAD_COUNT; i++) {
             int threadID = i;
-            Callable<List<StringBuilder>> callable = () -> {
+            Callable<ArrayList<StringBuilder>> callable = () -> {
                 SequenceGenerator generator = new SequenceGenerator(threadID, TOTAL_SEQUENCES / THREAD_COUNT, output, filter);
+                ArrayList<StringBuilder> output;
                 if (Configs.USE_FILTER) {
-                    return generator.generateUniqueSequences();
+                    output = generator.generateUniqueSequences();
                 }else {
-                    return generator.generateSequences();
+                    output = generator.generateSequences();
                 }
+                if (Configs.DEBUG_MODE) {
+                    generator.printSequences(output);
+                }
+                return output;
             };
-            Future<List<StringBuilder>> future =  executor.submit(callable);
+            Future<ArrayList<StringBuilder>> future =  executor.submit(callable);
             threadResultsMap.put(threadID, future);
         }
 
         shutdownExecutor(executor);
 
-        for (Integer key : threadResultsMap.keySet()) {
-            System.out.println(key + ": " + threadResultsMap.get(key).get().size());
+        if (Configs.DEBUG_MODE) {
+            for (Integer key : threadResultsMap.keySet()) {
+                System.out.println("Thread ID " + key + " : " + threadResultsMap.get(key).get());
+            }
         }
     }
 

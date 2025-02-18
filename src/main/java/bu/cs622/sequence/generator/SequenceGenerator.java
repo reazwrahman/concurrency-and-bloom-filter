@@ -78,6 +78,7 @@ public class SequenceGenerator implements Runnable{
                     sequences.get(i));
         }
     }
+
     private static int getRandomIndex(){
         return ThreadLocalRandom.current().nextInt(0, SEQUENCE_LETTERS.length);
     }
