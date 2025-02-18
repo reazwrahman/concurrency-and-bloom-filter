@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SequenceGenerator implements Runnable{
+public class SequenceGenerator implements Runnable {
     public static final Character[] SEQUENCE_LETTERS = {'A', 'T', 'G', 'C'};
     public static final int SEQUENCE_LENGTH = 10;
+    private final Filter m_filter;
     public Integer m_numOfSequences = null;
     public Integer m_threadId = null;
     public List<StringBuilder> m_synchronizedOutput = null;
-    private final Filter m_filter;
 
     public SequenceGenerator(int threadId, Integer numOfSequences,
                              List<StringBuilder> synchOutput,
@@ -23,9 +23,12 @@ public class SequenceGenerator implements Runnable{
         m_filter = filter;
     }
 
+    private static int getRandomIndex() {
+        return ThreadLocalRandom.current().nextInt(0, SEQUENCE_LETTERS.length);
+    }
 
     @Override
-    public void run(){
+    public void run() {
         ArrayList<StringBuilder> sequences;
         if (Configs.USE_FILTER) {
             sequences = generateUniqueSequences();
@@ -47,19 +50,19 @@ public class SequenceGenerator implements Runnable{
                 sequence.append(SEQUENCE_LETTERS[getRandomIndex()]);
             }
 //            if (!m_filter.checkMembership(sequence.toString())) {
-                sequences.add(sequence);
-                m_filter.insert(sequence.toString());
-                m_synchronizedOutput.add(sequence);
-                i++;
+            sequences.add(sequence);
+            m_filter.insert(sequence.toString());
+            m_synchronizedOutput.add(sequence);
+            i++;
 //            }
         }
 
         return sequences;
     }
 
-    public ArrayList<StringBuilder> generateSequences(){
-            ArrayList<StringBuilder> sequences = new ArrayList<>();
-        for (int i=0; i<m_numOfSequences; i++) {
+    public ArrayList<StringBuilder> generateSequences() {
+        ArrayList<StringBuilder> sequences = new ArrayList<>();
+        for (int i = 0; i < m_numOfSequences; i++) {
             StringBuilder test = new StringBuilder();
             for (int j = 0; j < SEQUENCE_LENGTH; j++) {
                 test.append(SEQUENCE_LETTERS[getRandomIndex()]);
@@ -71,17 +74,13 @@ public class SequenceGenerator implements Runnable{
         return sequences;
     }
 
-    public void printSequences(ArrayList<StringBuilder> sequences){
+    public void printSequences(ArrayList<StringBuilder> sequences) {
         int offset = (m_threadId - 1) * m_numOfSequences;
-        for (int i=0; i < sequences.size(); i++) {
-            int number = (i+1)+offset;
+        for (int i = 0; i < sequences.size(); i++) {
+            int number = (i + 1) + offset;
             System.out.println("Thread ID: " + m_threadId.toString() +
                     ", Sequence no " + number + ": " +
                     sequences.get(i));
         }
-    }
-
-    private static int getRandomIndex(){
-        return ThreadLocalRandom.current().nextInt(0, SEQUENCE_LETTERS.length);
     }
 }

@@ -10,18 +10,16 @@ public class Configs {
 
     public static final Integer TOTAL_SEQUENCES = 10000;
     public static final Integer THREAD_COUNT = 5;
+    public static final ThreadCreationTypes THREAD_TYPE = ThreadCreationTypes.EXECUTOR_FUTURE;
+    public static final FilterTypes FILTER_TYPE = FilterTypes.HASH_SET_FILTER;
 
     public enum ThreadCreationTypes {
         THREAD_CLASS,
         EXECUTOR_RUNNABLE,
         EXECUTOR_FUTURE
     }
-
     public enum FilterTypes {
         BLOOM_FILTER,
         HASH_SET_FILTER
     }
-
-    public static final ThreadCreationTypes THREAD_TYPE = ThreadCreationTypes.EXECUTOR_FUTURE;
-    public static final FilterTypes FILTER_TYPE = FilterTypes.HASH_SET_FILTER;
 }

@@ -54,7 +54,7 @@ public class ThreadHelper {
 
     private void useExecutorWithRunnable() throws InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
-         for (int i = 1; i <= numThreads; i++) {
+        for (int i = 1; i <= numThreads; i++) {
             executor.submit(new SequenceGenerator(i, TOTAL_SEQUENCES / THREAD_COUNT, output, filter));
         }
         shutdownExecutor(executor);
@@ -65,14 +65,14 @@ public class ThreadHelper {
         ExecutorService executor = Executors.newCachedThreadPool();
         HashMap<Integer, Future<ArrayList<StringBuilder>>> threadResultsMap = new HashMap<>();
 
-        for (int i=1; i<= THREAD_COUNT; i++) {
+        for (int i = 1; i <= THREAD_COUNT; i++) {
             int threadID = i;
             Callable<ArrayList<StringBuilder>> callable = () -> {
                 SequenceGenerator generator = new SequenceGenerator(threadID, TOTAL_SEQUENCES / THREAD_COUNT, output, filter);
                 ArrayList<StringBuilder> output;
                 if (Configs.USE_FILTER) {
                     output = generator.generateUniqueSequences();
-                }else {
+                } else {
                     output = generator.generateSequences();
                 }
                 if (Configs.DEBUG_MODE) {
@@ -80,7 +80,7 @@ public class ThreadHelper {
                 }
                 return output;
             };
-            Future<ArrayList<StringBuilder>> future =  executor.submit(callable);
+            Future<ArrayList<StringBuilder>> future = executor.submit(callable);
             threadResultsMap.put(threadID, future);
         }
 
@@ -99,7 +99,7 @@ public class ThreadHelper {
         while (!executor.isTerminated()) {
             executor.awaitTermination(1, TimeUnit.MILLISECONDS);
         }
-        if(!executor.isShutdown()) {
+        if (!executor.isShutdown()) {
             throw new RuntimeException("ThreadHelper::shutdownExecutor failed to shut down executor service");
         }
     }
@@ -109,9 +109,9 @@ public class ThreadHelper {
 
         if (Configs.THREAD_TYPE == Configs.ThreadCreationTypes.THREAD_CLASS) {
             useThreadClass();
-        }else if (Configs.THREAD_TYPE == Configs.ThreadCreationTypes.EXECUTOR_RUNNABLE) {
+        } else if (Configs.THREAD_TYPE == Configs.ThreadCreationTypes.EXECUTOR_RUNNABLE) {
             useExecutorWithRunnable();
-        }else {
+        } else {
             useExecutorWithFuture();
         }
 
@@ -130,7 +130,7 @@ public class ThreadHelper {
         reportResults(elapsed);
     }
 
-    public void reportResults(Duration elapsed){
+    public void reportResults(Duration elapsed) {
         if (Configs.SINGLE_THREAD) {
             System.out.println("Single threaded total time taken: " + elapsed.toMillis() + " milliseconds");
         } else {
@@ -138,6 +138,6 @@ public class ThreadHelper {
         }
         System.out.println("output size: " + output.size());
         System.out.println("filter size: " + filter.getApprxoimateSize());
-        System.out.println("Peak heap used by " + filterType +": " + filter.getPeakMemory()/ (1024 * 1024) + " MB");
+        System.out.println("Peak heap used by " + filterType + ": " + filter.getPeakMemory() / (1024 * 1024) + " MB");
     }
 }

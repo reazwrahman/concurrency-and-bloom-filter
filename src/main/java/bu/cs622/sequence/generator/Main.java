@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, InvalidAttributeValueException, ExecutionException {
         validateConfigs();
         ThreadHelper threadHelper = new ThreadHelper();
-        if(Configs.SINGLE_THREAD) {
+        if (Configs.SINGLE_THREAD) {
             threadHelper.initiateSingleThread();
         }
         if (Configs.MULTI_THREAD) {
