@@ -1,14 +1,12 @@
+import bu.cs622.sequence.generator.filters.SequenceBloomFilter;
 import org.junit.Test;
-
-import bu.cs622.sequence.generator.SequenceFilter;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SequenceFilterTest {
 
     @Test
     public void testBloomFilter(){
-        SequenceFilter filter = new SequenceFilter(10);
+        SequenceBloomFilter filter = new SequenceBloomFilter(10);
         filter.insert("apple");
         filter.insert("orange");
         filter.insert("banana");
@@ -23,7 +21,7 @@ public class SequenceFilterTest {
 
     @Test
     public void testBloomFilterConcurrently() throws InterruptedException {
-        SequenceFilter filter = new SequenceFilter(10);
+        SequenceBloomFilter filter = new SequenceBloomFilter(10);
         Thread t1 = new Thread(() -> {
                     filter.insert("apple");
                     filter.insert("orange");

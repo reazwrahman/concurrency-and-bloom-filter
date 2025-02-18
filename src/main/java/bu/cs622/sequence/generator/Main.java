@@ -8,7 +8,7 @@ import static bu.cs622.sequence.generator.Configs.TOTAL_SEQUENCES;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException, InvalidAttributeValueException, ExecutionException {
-        validateConfigs();
+        //validateConfigs();
         ThreadHelper threadHelper = new ThreadHelper();
         if(Configs.SINGLE_THREAD) {
             threadHelper.initiateSingleThread();

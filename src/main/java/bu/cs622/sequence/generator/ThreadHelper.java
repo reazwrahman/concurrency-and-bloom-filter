@@ -1,5 +1,9 @@
 package bu.cs622.sequence.generator;
 
+import bu.cs622.sequence.generator.filters.Filter;
+import bu.cs622.sequence.generator.filters.SequenceBloomFilter;
+import bu.cs622.sequence.generator.filters.SequenceHashSetFilter;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -13,8 +17,19 @@ import static bu.cs622.sequence.generator.Configs.TOTAL_SEQUENCES;
 
 public class ThreadHelper {
     int numThreads = THREAD_COUNT;
-    SequenceFilter filter = new SequenceFilter(TOTAL_SEQUENCES);
+    Filter filter = null;
+    String filterType = Configs.FILTER_TYPE.toString();
     List<StringBuilder> output = Collections.synchronizedList(new ArrayList<>());
+
+
+    public ThreadHelper() {
+        if (Configs.FILTER_TYPE == Configs.FilterTypes.HASH_SET_FILTER) {
+            Filter filter = new SequenceBloomFilter(TOTAL_SEQUENCES);
+        } else {
+            filter = new SequenceHashSetFilter();
+        }
+    }
+
 
     private void useThreadClass() throws InterruptedException {
         List<Thread> threads = new ArrayList<>();
@@ -31,7 +46,6 @@ public class ThreadHelper {
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                throw e;
             }
         }
 
@@ -79,7 +93,7 @@ public class ThreadHelper {
     }
 
     // helper method to shut down an executor service
-    private void shutdownExecutor(ExecutorService executor) throws InterruptedException {
+    private void shutdownExecutor(ExecutorService executor) throws InterruptedException, RuntimeException {
         executor.shutdown();
         while (!executor.isTerminated()) {
             executor.awaitTermination(1, TimeUnit.MILLISECONDS);
@@ -106,14 +120,14 @@ public class ThreadHelper {
         System.out.println("Multi threaded total time taken: " + elapsed.toMillis() + " milliseconds");
         System.out.println("output size: " + output.size());
         System.out.println("filter size: " + filter.getApprxoimateSize());
-        System.out.println("Peak heap used by bloom filter: " + filter.peakMemory/ (1024 * 1024) + " MB");
+        System.out.println("Peak heap used by bloom filter: " + filter.getPeakMemory()/ (1024 * 1024) + " MB");
 
     }
 
     public void initiateSingleThread(){
         Instant start = Instant.now();
         List<StringBuilder> output = new ArrayList<>();
-        SequenceFilter filter = new SequenceFilter(TOTAL_SEQUENCES);
+        Filter filter = new SequenceBloomFilter(TOTAL_SEQUENCES);
 
         SequenceGenerator generator = new SequenceGenerator(1, TOTAL_SEQUENCES, output, filter);
         generator.run();
@@ -123,6 +137,6 @@ public class ThreadHelper {
         System.out.println("Single threaded total time taken: " + elapsed.toMillis() + " milliseconds");
         System.out.println("output size: " + output.size());
         System.out.println("filter size: " + filter.getApprxoimateSize());
-        System.out.println("Peak heap used by bloom filter: " + filter.peakMemory/ (1024 * 1024) + " MB");
+        System.out.println("Peak heap used by " + filterType +": " + filter.getPeakMemory()/ (1024 * 1024) + " MB");
     }
 }

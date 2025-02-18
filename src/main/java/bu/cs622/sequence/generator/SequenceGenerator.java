@@ -1,5 +1,7 @@
 package bu.cs622.sequence.generator;
 
+import bu.cs622.sequence.generator.filters.Filter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,11 +12,11 @@ public class SequenceGenerator implements Runnable{
     public Integer m_numOfSequences = null;
     public Integer m_threadId = null;
     public List<StringBuilder> m_synchronizedOutput = null;
-    private final SequenceFilter m_filter;
+    private final Filter m_filter;
 
     public SequenceGenerator(int threadId, Integer numOfSequences,
                              List<StringBuilder> synchOutput,
-                             SequenceFilter filter) {
+                             Filter filter) {
         m_numOfSequences = numOfSequences;
         m_threadId = threadId;
         m_synchronizedOutput = synchOutput;
@@ -44,12 +46,12 @@ public class SequenceGenerator implements Runnable{
             for (int j = 0; j < SEQUENCE_LENGTH; j++) {
                 sequence.append(SEQUENCE_LETTERS[getRandomIndex()]);
             }
-            if (!m_filter.checkMembership(sequence.toString())) {
+//            if (!m_filter.checkMembership(sequence.toString())) {
                 sequences.add(sequence);
                 m_filter.insert(sequence.toString());
                 m_synchronizedOutput.add(sequence);
                 i++;
-            }
+//            }
         }
 
         return sequences;
