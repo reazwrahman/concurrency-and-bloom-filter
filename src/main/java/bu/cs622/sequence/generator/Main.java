@@ -1,15 +1,9 @@
 package bu.cs622.sequence.generator;
 
 import javax.management.InvalidAttributeValueException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
 
-import static bu.cs622.sequence.generator.Configs.*;
+import static bu.cs622.sequence.generator.Configs.TOTAL_SEQUENCES;
 
 public class Main {
 

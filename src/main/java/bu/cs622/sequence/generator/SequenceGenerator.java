@@ -10,7 +10,7 @@ public class SequenceGenerator implements Runnable{
     public Integer m_numOfSequences = null;
     public Integer m_threadId = null;
     public List<StringBuilder> m_synchronizedOutput = null;
-    private SequenceFilter m_filter;
+    private final SequenceFilter m_filter;
 
     public SequenceGenerator(int threadId, Integer numOfSequences,
                              List<StringBuilder> synchOutput,

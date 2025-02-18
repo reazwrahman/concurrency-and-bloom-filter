@@ -1,14 +1,15 @@
 package bu.cs622.sequence.generator;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.google.common.base.Charsets;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class SequenceFilter {
 
-    private BloomFilter<String> m_bloomFilter;
-    private Runtime runtime = Runtime.getRuntime();
+    private final BloomFilter<String> m_bloomFilter;
+    private final Runtime runtime = Runtime.getRuntime();
     public long peakMemory = runtime.totalMemory() - runtime.freeMemory();
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
