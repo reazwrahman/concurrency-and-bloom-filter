@@ -20,6 +20,7 @@ public class SequenceFilter {
         m_bloomFilter = BloomFilter.create(Funnels.stringFunnel(Charsets.UTF_8), expectedRecords, 0.01);
     }
 
+    // example of write lock
     public void insert(String record){
         writeLock.lock();
         try {
@@ -30,6 +31,7 @@ public class SequenceFilter {
         }
     }
 
+    // example of read lock
     public boolean checkMembership(String record){
         readLock.lock();
         try {
@@ -39,12 +41,8 @@ public class SequenceFilter {
         }
     }
 
-    public long getApprxoimateSize(){
-        readLock.lock();
-        try {
-            return m_bloomFilter.approximateElementCount();
-        }finally {
-            readLock.unlock();
-        }
+    // example of structured lock
+    public synchronized long getApprxoimateSize(){
+        return m_bloomFilter.approximateElementCount();
     }
 }

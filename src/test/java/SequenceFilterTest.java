@@ -42,9 +42,8 @@ public class SequenceFilterTest {
         t1.join();
         t2.join();
 
-
         assertTrue(filter.checkMembership("apple"));
-        assertTrue(filter.checkMembership("banana"));
+        assertTrue(filter.checkMembership("mango"));
         assertFalse(filter.checkMembership("grapes"));
 
         assertEquals(filter.getApprxoimateSize(), 5);
