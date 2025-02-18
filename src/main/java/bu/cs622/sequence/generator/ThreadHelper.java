@@ -17,14 +17,14 @@ import static bu.cs622.sequence.generator.Configs.TOTAL_SEQUENCES;
 
 public class ThreadHelper {
     int numThreads = THREAD_COUNT;
-    Filter filter = null;
+    Filter filter;
     String filterType = Configs.FILTER_TYPE.toString();
     List<StringBuilder> output = Collections.synchronizedList(new ArrayList<>());
 
 
     public ThreadHelper() {
         if (Configs.FILTER_TYPE == Configs.FilterTypes.HASH_SET_FILTER) {
-            Filter filter = new SequenceBloomFilter(TOTAL_SEQUENCES);
+            filter = new SequenceBloomFilter(TOTAL_SEQUENCES);
         } else {
             filter = new SequenceHashSetFilter();
         }
@@ -46,6 +46,7 @@ public class ThreadHelper {
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                throw e;
             }
         }
 
@@ -117,24 +118,24 @@ public class ThreadHelper {
         Instant end = Instant.now();
         Duration elapsed = Duration.between(start, end);
 
-        System.out.println("Multi threaded total time taken: " + elapsed.toMillis() + " milliseconds");
-        System.out.println("output size: " + output.size());
-        System.out.println("filter size: " + filter.getApprxoimateSize());
-        System.out.println("Peak heap used by bloom filter: " + filter.getPeakMemory()/ (1024 * 1024) + " MB");
-
+        reportResults(elapsed);
     }
 
-    public void initiateSingleThread(){
+    public void initiateSingleThread() {
         Instant start = Instant.now();
-        List<StringBuilder> output = new ArrayList<>();
-        Filter filter = new SequenceBloomFilter(TOTAL_SEQUENCES);
-
         SequenceGenerator generator = new SequenceGenerator(1, TOTAL_SEQUENCES, output, filter);
         generator.run();
         Instant end = Instant.now();
         Duration elapsed = Duration.between(start, end);
+        reportResults(elapsed);
+    }
 
-        System.out.println("Single threaded total time taken: " + elapsed.toMillis() + " milliseconds");
+    public void reportResults(Duration elapsed){
+        if (Configs.SINGLE_THREAD) {
+            System.out.println("Single threaded total time taken: " + elapsed.toMillis() + " milliseconds");
+        } else {
+            System.out.println("Multi threaded total time taken: " + elapsed.toMillis() + " milliseconds");
+        }
         System.out.println("output size: " + output.size());
         System.out.println("filter size: " + filter.getApprxoimateSize());
         System.out.println("Peak heap used by " + filterType +": " + filter.getPeakMemory()/ (1024 * 1024) + " MB");
