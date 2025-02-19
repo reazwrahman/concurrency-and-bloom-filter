@@ -1,5 +1,5 @@
 import bu.cs622.sequence.generator.filters.SequenceBloomFilter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.*;
 
@@ -44,6 +44,7 @@ public class SequenceBloomFilterTest {
         assertFalse(filter.checkMembership("grapes"));
 
         assertEquals(filter.getApprxoimateSize(), 5);
+        assertDoesNotThrow(filter::getPeakMemory);
 
     }
 

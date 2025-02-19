@@ -49,12 +49,12 @@ public class SequenceGenerator implements Runnable {
             for (int j = 0; j < SEQUENCE_LENGTH; j++) {
                 sequence.append(SEQUENCE_LETTERS[getRandomIndex()]);
             }
-//            if (!m_filter.checkMembership(sequence.toString())) {
-            sequences.add(sequence);
-            m_filter.insert(sequence.toString());
-            m_synchronizedOutput.add(sequence);
-            i++;
-//            }
+            if (!m_filter.checkMembership(sequence.toString())) {
+                sequences.add(sequence);
+                m_filter.insert(sequence.toString());
+                m_synchronizedOutput.add(sequence);
+                i++;
+            }
         }
 
         return sequences;

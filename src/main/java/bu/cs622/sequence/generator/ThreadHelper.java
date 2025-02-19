@@ -23,7 +23,7 @@ public class ThreadHelper {
 
 
     public ThreadHelper() {
-        if (Configs.FILTER_TYPE == Configs.FilterTypes.HASH_SET_FILTER) {
+        if (Configs.FILTER_TYPE == Configs.FilterTypes.BLOOM_FILTER) {
             filter = new SequenceBloomFilter(TOTAL_SEQUENCES);
         } else {
             filter = new SequenceHashSetFilter();
@@ -69,16 +69,16 @@ public class ThreadHelper {
             int threadID = i;
             Callable<ArrayList<StringBuilder>> callable = () -> {
                 SequenceGenerator generator = new SequenceGenerator(threadID, TOTAL_SEQUENCES / THREAD_COUNT, output, filter);
-                ArrayList<StringBuilder> output;
+                ArrayList<StringBuilder> result;
                 if (Configs.USE_FILTER) {
-                    output = generator.generateUniqueSequences();
+                    result = generator.generateUniqueSequences();
                 } else {
-                    output = generator.generateSequences();
+                    result = generator.generateSequences();
                 }
                 if (Configs.DEBUG_MODE) {
-                    generator.printSequences(output);
+                    generator.printSequences(result);
                 }
-                return output;
+                return result;
             };
             Future<ArrayList<StringBuilder>> future = executor.submit(callable);
             threadResultsMap.put(threadID, future);
@@ -107,9 +107,9 @@ public class ThreadHelper {
     public void initiateMultiThread() throws InterruptedException, ExecutionException {
         Instant start = Instant.now();
 
-        if (Configs.THREAD_TYPE == Configs.ThreadCreationTypes.THREAD_CLASS) {
+        if (Configs.THREAD_CREATION_METHOD == Configs.ThreadCreationTypes.THREAD_CLASS) {
             useThreadClass();
-        } else if (Configs.THREAD_TYPE == Configs.ThreadCreationTypes.EXECUTOR_RUNNABLE) {
+        } else if (Configs.THREAD_CREATION_METHOD == Configs.ThreadCreationTypes.EXECUTOR_RUNNABLE) {
             useExecutorWithRunnable();
         } else {
             useExecutorWithFuture();
