@@ -26,6 +26,7 @@ public class Configs {
         EXECUTOR_RUNNABLE,
         EXECUTOR_FUTURE
     }
+
     public enum FilterTypes {
         BLOOM_FILTER,
         HASH_SET_FILTER
