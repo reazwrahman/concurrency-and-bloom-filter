@@ -4,7 +4,7 @@ This is a simple program that demonstrates the usage of concurrency in Java and 
 The program generates a user-defined number of DNA sequences using both single threaded and multi-threaded approaches 
 and compares the time taken to generate the sequences. 
 
-Video Demo YouTube link: <TODO>
+Video Demo YouTube link: https://www.youtube.com/watch?v=ya-aFVk0l2M
 
 
 ## How to run
@@ -31,7 +31,7 @@ When the USE_FILTER flag is set to true in Configs.java, the program will use th
 
 I also enabled structured and unstructured (read-write) locks to have the filter working in a multi-threaded environment.
 
-### Results 
+## Results 
 I compared the performance between the single-threaded and multi-threaded approach first without using any filter and 
 then with the filter. The results are shown below. 
 

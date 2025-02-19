@@ -15,6 +15,14 @@ import java.util.concurrent.*;
 import static bu.cs622.sequence.generator.Configs.THREAD_COUNT;
 import static bu.cs622.sequence.generator.Configs.TOTAL_SEQUENCES;
 
+/**
+ * Name: Reaz W. Rahman
+ * Course: CS 622: Advanced Programming Techniques
+ * Date: 2/19/2025
+ * File name: ThreadHelper.java
+ * Description: This class helps to create and manage threads for generating sequences.
+ */
+
 public class ThreadHelper {
     int numThreads = THREAD_COUNT;
     Filter filter;
@@ -30,7 +38,7 @@ public class ThreadHelper {
         }
     }
 
-
+    // Create threads using the Thread class
     private void useThreadClass() throws InterruptedException {
         List<Thread> threads = new ArrayList<>();
 
@@ -52,6 +60,7 @@ public class ThreadHelper {
 
     }
 
+    // Create threads using the ExecutorService with Runnable
     private void useExecutorWithRunnable() throws InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
         for (int i = 1; i <= numThreads; i++) {
@@ -61,6 +70,7 @@ public class ThreadHelper {
 
     }
 
+    // Create threads using the ExecutorService with Future
     private void useExecutorWithFuture() throws ExecutionException, InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
         HashMap<Integer, Future<ArrayList<StringBuilder>>> threadResultsMap = new HashMap<>();
@@ -121,6 +131,7 @@ public class ThreadHelper {
         reportResults(elapsed);
     }
 
+    // Create a single thread to generate sequences
     public void initiateSingleThread() {
         Instant start = Instant.now();
         SequenceGenerator generator = new SequenceGenerator(1, TOTAL_SEQUENCES, output, filter);
@@ -130,6 +141,7 @@ public class ThreadHelper {
         reportResults(elapsed);
     }
 
+    // Report the time/memory taken by the thread(s) to generate sequences
     public void reportResults(Duration elapsed) {
         if (Configs.SINGLE_THREAD) {
             System.out.println("Single threaded total time taken: " + elapsed.toMillis() + " milliseconds");

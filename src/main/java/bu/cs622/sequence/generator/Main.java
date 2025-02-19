@@ -18,6 +18,7 @@ public class Main {
         }
     }
 
+    // Validate the configurations
     public static void validateConfigs() throws InvalidAttributeValueException {
         if (Configs.USE_FILTER && TOTAL_SEQUENCES > 1000000) {
             throw new InvalidAttributeValueException("Only 1 Million unique sequences can be generated");
