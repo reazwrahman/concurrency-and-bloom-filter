@@ -8,10 +8,10 @@ package bu.cs622.sequence.generator.filters;
  * Description: This is the interface for the filters that will be used to generate unique sequences.
  */
 
-public interface Filter {
-    void insert(String record);
+public interface Filter<T> {
+    void insert(T record);
 
-    boolean checkMembership(String record);
+    boolean checkMembership(T record);
 
     long getApprxoimateSize();
 

@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Description: This class implements the Filter interface and uses a HashSet to store unique sequences.
  */
 
-public class SequenceHashSetFilter implements Filter {
-    private final Set<String> set;
+public class SequenceHashSetFilter<T> implements Filter<T> {
+    private final Set<T> set;
     private final Runtime runtime = Runtime.getRuntime();
     private long peakMemory = runtime.totalMemory() - runtime.freeMemory();
 
@@ -22,14 +22,14 @@ public class SequenceHashSetFilter implements Filter {
 
     // Insert a record into the HashSet
     @Override
-    public void insert(String record) {
+    public void insert(T record) {
         set.add(record);
         peakMemory = Math.max(runtime.totalMemory() - runtime.freeMemory(), peakMemory);
     }
 
     // Check if a record is a member of the HashSet
     @Override
-    public boolean checkMembership(String record) {
+    public boolean checkMembership(T record) {
         return set.contains(record);
     }
 

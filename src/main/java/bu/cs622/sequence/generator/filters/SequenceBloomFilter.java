@@ -2,8 +2,10 @@ package bu.cs622.sequence.generator.filters;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnel;
 import com.google.common.hash.Funnels;
 
+import java.nio.charset.Charset;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -14,9 +16,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Description: This class implements the Filter interface and uses a Bloom Filter to store and check for unique sequences.
  */
 
-public class SequenceBloomFilter implements Filter {
+public class SequenceBloomFilter<T> implements Filter<T> {
 
-    private final BloomFilter<String> m_bloomFilter;
+    private final BloomFilter<T> m_bloomFilter;
     private final Runtime runtime = Runtime.getRuntime();
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final ReentrantReadWriteLock.ReadLock readLock = lock.readLock();
@@ -24,14 +26,14 @@ public class SequenceBloomFilter implements Filter {
     private long peakMemory = runtime.totalMemory() - runtime.freeMemory();
 
     // Constructor for the SequenceBloomFilter class
-    public SequenceBloomFilter(int expectedRecords) {
+    public SequenceBloomFilter(int expectedRecords, Funnel<T> funnel) {
         // Create a Bloom Filter for integers with expected insertions and false positive probability
-        m_bloomFilter = BloomFilter.create(Funnels.stringFunnel(Charsets.UTF_8), expectedRecords, 0.01);
+        m_bloomFilter = BloomFilter.create(funnel, expectedRecords, 0.01);
     }
 
     // Insert a record into the Bloom Filter
     @Override
-    public void insert(String record) {
+    public void insert(T record) {
         writeLock.lock(); // example of write lock
         try {
             m_bloomFilter.put(record);
@@ -43,7 +45,7 @@ public class SequenceBloomFilter implements Filter {
 
     // Check if a record is a member of the Bloom Filter
     @Override
-    public boolean checkMembership(String record) {
+    public boolean checkMembership(T record) {
         readLock.lock(); // example of read lock
         try {
             return m_bloomFilter.mightContain(record);

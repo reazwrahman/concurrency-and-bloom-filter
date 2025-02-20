@@ -1,4 +1,7 @@
 import bu.cs622.sequence.generator.filters.SequenceBloomFilter;
+import com.google.common.hash.Funnel;
+import com.google.common.hash.Funnels;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.*;
@@ -7,10 +10,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SequenceBloomFilterTest {
+    static SequenceBloomFilter filter;
+
+    @BeforeAll
+    public static void setUp() {
+        Funnel<CharSequence> funnel = Funnels.stringFunnel(java.nio.charset.StandardCharsets.UTF_8);
+        filter = new SequenceBloomFilter<>(10, funnel);
+    }
 
     @Test
     public void testBloomFilter(){
-        SequenceBloomFilter filter = new SequenceBloomFilter(10);
         filter.insert("apple");
         filter.insert("orange");
         filter.insert("banana");
@@ -25,7 +34,6 @@ public class SequenceBloomFilterTest {
 
     @Test
     public void testBloomFilterConcurrently() throws InterruptedException {
-        SequenceBloomFilter filter = new SequenceBloomFilter(10);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
             filter.insert("apple");
@@ -46,6 +54,22 @@ public class SequenceBloomFilterTest {
 
         assertEquals(filter.getApprxoimateSize(), 5);
         assertDoesNotThrow(filter::getPeakMemory);
+
+    }
+
+    @Test
+    public void testBloomFilterWithInteger(){
+        Funnel<Integer> funnel = Funnels.integerFunnel();
+        SequenceBloomFilter<Integer> filter = new SequenceBloomFilter(10, funnel);
+        filter.insert(1200);
+        filter.insert(-5441);
+        filter.insert(0);
+
+        assertTrue(filter.checkMembership(1200));
+        assertTrue(filter.checkMembership(-5441));
+        assertFalse(filter.checkMembership(-42));
+
+        assertEquals(filter.getApprxoimateSize(), 3);
 
     }
 

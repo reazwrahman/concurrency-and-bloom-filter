@@ -3,6 +3,8 @@ package bu.cs622.sequence.generator;
 import bu.cs622.sequence.generator.filters.Filter;
 import bu.cs622.sequence.generator.filters.SequenceBloomFilter;
 import bu.cs622.sequence.generator.filters.SequenceHashSetFilter;
+import com.google.common.hash.Funnel;
+import com.google.common.hash.Funnels;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -25,16 +27,17 @@ import static bu.cs622.sequence.generator.Configs.TOTAL_SEQUENCES;
 
 public class ThreadHelper {
     int numThreads = THREAD_COUNT;
-    Filter filter;
+    Filter<String> filter;
     String filterType = Configs.FILTER_TYPE.toString();
     List<StringBuilder> output = Collections.synchronizedList(new ArrayList<>());
 
 
     public ThreadHelper() {
         if (Configs.FILTER_TYPE == Configs.FilterTypes.BLOOM_FILTER) {
-            filter = new SequenceBloomFilter(TOTAL_SEQUENCES);
+            Funnel<CharSequence> funnel = Funnels.stringFunnel(java.nio.charset.StandardCharsets.UTF_8);
+            filter = new SequenceBloomFilter(TOTAL_SEQUENCES, funnel);
         } else {
-            filter = new SequenceHashSetFilter();
+            filter = new SequenceHashSetFilter<>();
         }
     }
 

@@ -19,7 +19,7 @@ public class Configs {
     public static final Integer THREAD_COUNT = 5;
 
     public static final ThreadCreationTypes THREAD_CREATION_METHOD = ThreadCreationTypes.EXECUTOR_FUTURE; // different types of thread creation methods
-    public static final FilterTypes FILTER_TYPE = FilterTypes.BLOOM_FILTER; // different types of filters to generate unique sequences
+    public static final FilterTypes FILTER_TYPE = FilterTypes.HASH_SET_FILTER; // different types of filters to generate unique sequences
 
     public enum ThreadCreationTypes {
         THREAD_CLASS,
