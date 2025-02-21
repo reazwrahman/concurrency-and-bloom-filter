@@ -67,7 +67,7 @@ public class ThreadHelper {
     private void useExecutorWithRunnable() throws InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
         for (int i = 1; i <= numThreads; i++) {
-            executor.submit(new SequenceGenerator(i, TOTAL_SEQUENCES / THREAD_COUNT, output, filter));
+            executor.execute(new SequenceGenerator(i, TOTAL_SEQUENCES / THREAD_COUNT, output, filter));
         }
         shutdownExecutor(executor);
 
